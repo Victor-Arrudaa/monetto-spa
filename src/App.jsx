@@ -1,7 +1,12 @@
+import Home from "./pages/Home";
+import Signin from "./pages/Signin";
+
 function App() {
     return (
         <>
-            <h1 className="text-3xl font-bold underline">Hello world!</h1>
+            <main className="h-screen flex items-center justify-center">
+                <Signin />
+            </main>
         </>
     );
 }
