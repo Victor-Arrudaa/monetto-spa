@@ -4,7 +4,7 @@ export default function Input({ type, placeholder, register, name }) {
         <input
             type={type}
             placeholder={placeholder}
-            className="rounded-md p-2 w-full border text-zinc-800"
+            className="rounded-sm p-2 w-full border-b-2 border-b-zinc-300 text-zinc-800 outline-none"
             {...register(name)}
         />
     );

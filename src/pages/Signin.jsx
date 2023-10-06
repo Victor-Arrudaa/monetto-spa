@@ -3,18 +3,33 @@ import logo from "../assets/monetto.svg";
 import Button from "../components/Button";
 import Input from "../components/input";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorInput from "../components/ErrorInput";
+import { signinSchema } from "../schemas/SigninSchema.js";
+import { signin } from "../services/user";
+import Cookies from "js-cookie";
 
 export default function Signin() {
-    const { register, handleSubmit } = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ resolver: zodResolver(signinSchema) });
 
-    function handleSubmitForm(data) {
-        console.log(data);
+    async function handleSubmitForm(data) {
+        try {
+            const token = await signin(data);
+            Cookies.set("token", token.data, { expires: 1 });
+            console.log(Cookies.get("token"));
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     return (
         <div
             className="flex flex-col items-center justify-around
-            bg-yellow-300 rounded-xl p-8 w-[27rem] min-h-[30rem]"
+            bg-white rounded-xl p-8 min-w-[20rem] max-w-md min-h-[30rem]"
         >
             <img src={logo} alt="monetto logo" className="w-44" />
             <form
@@ -27,12 +42,17 @@ export default function Signin() {
                     register={register}
                     name="email"
                 />
+                {errors.email && <ErrorInput text={errors.email.message} />}
                 <Input
                     type="password"
                     placeholder="Senha"
                     register={register}
                     name="password"
                 />
+                {errors.password && (
+                    <ErrorInput text={errors.password.message} />
+                )}
+
                 <Button type="submit" text="Signin" />
             </form>
 
