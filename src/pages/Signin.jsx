@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/monetto.svg";
 import Button from "../components/Button";
 import Input from "../components/input";
@@ -16,11 +16,13 @@ export default function Signin() {
         formState: { errors },
     } = useForm({ resolver: zodResolver(signinSchema) });
 
+    const navigate = useNavigate();
+
     async function handleSubmitForm(data) {
         try {
             const token = await signin(data);
             Cookies.set("token", token.data, { expires: 1 });
-            console.log(Cookies.get("token"));
+            navigate("/");
         } catch (error) {
             console.log(error.message);
         }
