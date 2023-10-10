@@ -6,11 +6,13 @@ import Signin from "./pages/Signin.jsx";
 import Signup from "./pages/Signup.jsx";
 import Home from "./pages/Home.jsx";
 import NewTransaction from "./pages/NewTransaction";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
+        errorElement: <ErrorPage />,
     },
     {
         path: "/signin",

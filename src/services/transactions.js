@@ -5,7 +5,15 @@ const BASE_URL = "http://localhost:3000";
 
 export function findAllTransaction() {
     const response = axios.get(`${BASE_URL}/transactions`, {
-        headers: { Authorization: `${Cookies.get("token")}` },
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    });
+
+    return response;
+}
+
+export function createNewTransaction(body) {
+    const response = axios.post(`${BASE_URL}/transactions`, body, {
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
     });
 
     return response;

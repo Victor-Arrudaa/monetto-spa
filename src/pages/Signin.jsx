@@ -8,6 +8,7 @@ import ErrorInput from "../components/ErrorInput";
 import { signinSchema } from "../schemas/SigninSchema.js";
 import { signin } from "../services/user";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 export default function Signin() {
     const {
@@ -17,6 +18,7 @@ export default function Signin() {
     } = useForm({ resolver: zodResolver(signinSchema) });
 
     const navigate = useNavigate();
+    const [apiErrors, setApiErrors] = useState("");
 
     async function handleSubmitForm(data) {
         try {
@@ -24,9 +26,13 @@ export default function Signin() {
             Cookies.set("token", token.data, { expires: 1 });
             navigate("/");
         } catch (error) {
-            console.log(error.message);
+            setApiErrors(error.message);
         }
     }
+
+    useEffect(() => {
+        Cookies.remove("token");
+    }, []);
 
     return (
         <div
@@ -34,6 +40,7 @@ export default function Signin() {
             bg-white rounded-xl p-8 min-w-[20rem] max-w-md min-h-[30rem]"
         >
             <img src={logo} alt="monetto logo" className="w-44" />
+            {apiErrors && <ErrorInput text={apiErrors} />}
             <form
                 onSubmit={handleSubmit(handleSubmitForm)}
                 className="flex flex-col items-center justify-center gap-4 w-full text-2xl"

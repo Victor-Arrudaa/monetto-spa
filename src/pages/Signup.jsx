@@ -9,6 +9,7 @@ import ErrorInput from "../components/ErrorInput";
 import { signupSchema } from "../schemas/SignupSchema.js";
 import { signup } from "../services/user";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Signup() {
     const {
@@ -17,13 +18,14 @@ export default function Signup() {
         formState: { errors },
     } = useForm({ resolver: zodResolver(signupSchema) });
     const navigate = useNavigate();
+    const [apiErrors, setApiErrors] = useState("");
 
     async function handleSubmitForm(data) {
         try {
             await signup(data);
             navigate("/signin");
         } catch (error) {
-            console.log(error.message);
+            setApiErrors(error.message);
         }
     }
 
@@ -33,6 +35,7 @@ export default function Signup() {
                 <BiArrowBack className="text-zinc-800 absolute top-3 left-3 text-2xl" />
             </Link>
             <img src={logo} alt="monetto logo" className="w-44 " />
+            {apiErrors && <ErrorInput text={apiErrors} />}
             <form
                 onSubmit={handleSubmit(handleSubmitForm)}
                 className="flex flex-col items-center justify-center gap-4 w-full text-2xl"
