@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://monetto-api.onrender.com";
 
 export async function signup(data) {
     delete data.confirmPassword;
