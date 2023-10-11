@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate } from "react-router-dom";
+import { Await, Link, useNavigate } from "react-router-dom";
 import { GoSignOut } from "react-icons/go";
+import { RiDeleteBin7Line } from "react-icons/ri";
 import logo from "../assets/monetto.svg";
 import Button from "../components/Button";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { userLogged } from "../services/user";
-import { findAllTransaction } from "../services/transactions";
+import {
+    deleteTransaction,
+    findAllTransaction,
+} from "../services/transactions";
 import dayjs from "dayjs";
 import ErrorInput from "../components/ErrorInput";
 
@@ -36,6 +40,22 @@ export default function Home() {
             const response = await findAllTransaction();
             setTransactions(response.data);
             calculateBalance(response.data);
+        } catch (error) {
+            setApiErrors(error.message);
+        }
+    }
+
+    async function handleRemoveTransaction(transactionId) {
+        try {
+            const response = await deleteTransaction(transactionId);
+            if (response.status === 204) {
+                const updatedTransactions = transactions.filter(
+                    (transaction) => transaction._id !== transactionId
+                );
+                setTransactions(updatedTransactions);
+            } else {
+                setApiErrors("Erro na deleção");
+            }
         } catch (error) {
             setApiErrors(error.message);
         }
@@ -91,6 +111,17 @@ export default function Home() {
                                                 transaction.created_at
                                             ).format("DD/MM")}
                                         </span>
+                                        <button
+                                            onClick={() =>
+                                                handleRemoveTransaction(
+                                                    transaction._id
+                                                )
+                                            }
+                                            className="bg-white cursor-pointer
+                                        ml-6 text-red-400 hover:text-red-600"
+                                        >
+                                            {<RiDeleteBin7Line />}
+                                        </button>
                                         {transaction.description}
                                     </span>
                                     <span

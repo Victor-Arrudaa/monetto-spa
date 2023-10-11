@@ -2,7 +2,7 @@
 import { BiPlusCircle, BiMinusCircle } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
-export default function Button({ text, type, icon, transaction }) {
+export default function Button({ children, text, type, icon, transaction }) {
     let IconComponent;
     const navigate = useNavigate();
 
@@ -17,6 +17,7 @@ export default function Button({ text, type, icon, transaction }) {
                 transaction && navigate(`/transactions/${transaction}`)
             }
         >
+            {children}
             {IconComponent && <IconComponent />} {text}
         </button>
     );

@@ -18,3 +18,11 @@ export function createNewTransaction(body) {
 
     return response;
 }
+
+export function deleteTransaction(id) {
+    const response = axios.delete(`${BASE_URL}/transactions/${id}`, {
+        headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    });
+
+    return response;
+}
